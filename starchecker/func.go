@@ -43,7 +43,7 @@ func main() {
 	b.WriteString("Fn Stars: " + strconv.Itoa(fnStars) + "\nOpenFaas Stars: " + strconv.Itoa(openFaasStars))
 	b.WriteString("\nWe're " + strconv.Itoa(behind) + " stars behind. Get to work!")
 
-	_, _, err = api.PostMessage("oracle", b.String(), params)
+	_, _, err = api.PostMessage("demostream", b.String(), params)
 	if err != nil {
 		fmt.Printf("%s\n", err)
 		return
