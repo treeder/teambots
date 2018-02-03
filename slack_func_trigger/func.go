@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
 
 	"github.com/nlopes/slack"
 )
@@ -17,8 +18,6 @@ type PostMsg struct {
 }
 
 func main() {
-	api := slack.New(os.Getenv("FIN_SLACK_KEY"))
-
 	data, err := ioutil.ReadAll(os.Stdin)
 	check(err)
 
@@ -40,17 +39,36 @@ func main() {
 	trigger_id=13345224609.738474920.8088930838d88f008e0
 	*/
 
-	getURL := "http://api.fnservice.io/r/" + m["text"][0]
-	res, _ := http.Get(getURL)
+	input := m["text"][0]
+
+	getURL := "http://api.fnservice.io/r/" + input
+
+	if strings.Contains(input, "slack_func_trigger") {
+		sendSlackMsg("Sorry I can't do that. That'll cause a recursive call.")
+		return
+	}
+
+	res, err := http.Get(getURL)
+	check(err)
 	defer res.Body.Close()
 
+	body, err := ioutil.ReadAll(res.Body)
+	check(err)
+
 	var b bytes.Buffer
-	b.WriteString("Hello Chad you triggered " + m["text"][0] + " func")
+	b.WriteString("Triggering: " + input + "\n")
+	b.WriteString("Response: " + string(body))
+	sendSlackMsg(b.String())
+
+}
+
+func sendSlackMsg(msg string) {
+	api := slack.New(os.Getenv("FIN_SLACK_KEY"))
 
 	params := slack.PostMessageParameters{
 		AsUser: true,
 	}
-	_, _, err = api.PostMessage("demostream", b.String(), params)
+	_, _, err := api.PostMessage("demostream", msg, params)
 	check(err)
 }
 
