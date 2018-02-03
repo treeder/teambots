@@ -11,12 +11,6 @@ import (
 	"github.com/nlopes/slack"
 )
 
-type PostMsg struct {
-	TeamID string `param:"team_id"`
-	UserID string `param:"user_id"`
-	Text   string `param:"text"`
-}
-
 func main() {
 	data, err := ioutil.ReadAll(os.Stdin)
 	check(err)
