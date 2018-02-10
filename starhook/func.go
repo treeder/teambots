@@ -30,20 +30,16 @@ func main() {
 	p := new(payloadIn)
 	json.NewDecoder(os.Stdin).Decode(p)
 
-	fmt.Printf("%+v \n", p)
-
-	fmt.Println(p.Sender.Login)
-
 	api := slack.New(os.Getenv("FIN_SLACK_KEY"))
 	params := slack.PostMessageParameters{
 		AsUser: true,
 	}
 
 	var b bytes.Buffer
-	b.WriteString(":star: User *" + p.Sender.Login + "* starred " + p.Repo.Name + "\n")
+	b.WriteString(":star: *" + p.Sender.Login + "* starred the *" + p.Repo.Name + "* repo\n")
 	b.WriteString("        Total stars now *" + strconv.Itoa(p.Repo.StarGazersCount) + "*")
 
-	_, _, err := api.PostMessage("demostream", b.String(), params)
+	_, _, err := api.PostMessage("general", b.String(), params)
 	if err != nil {
 		fmt.Printf("%s\n", err)
 		return
