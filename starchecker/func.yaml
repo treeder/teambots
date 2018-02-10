@@ -1,3 +1,4 @@
 version: 0.0.3
 runtime: go
 entrypoint: ./func
+description: This is a webhook function designed to receipt a payload from GitHub when a user stars a project. It will simply post to Slack the relevant information of the starred repo and new watcher.
