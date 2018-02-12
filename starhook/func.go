@@ -39,7 +39,8 @@ func main() {
 	b.WriteString(":star: *" + p.Sender.Login + "* starred the *" + p.Repo.Name + "* repo\n")
 	b.WriteString("        Total stars now *" + strconv.Itoa(p.Repo.StarGazersCount) + "*")
 
-	_, _, err := api.PostMessage("general", b.String(), params)
+	room := os.Getenv("ROOM_TO_POST")
+	_, _, err := api.PostMessage(room, b.String(), params)
 	if err != nil {
 		fmt.Printf("%s\n", err)
 		return

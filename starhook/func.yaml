@@ -1,3 +1,9 @@
 version: 0.0.13
 runtime: go
 entrypoint: ./func
+expects:
+  config:
+    - name: ROOM_TO_POST
+      required: true
+    - name: FIN_SLACK_KEY
+      required: true
