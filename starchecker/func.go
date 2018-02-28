@@ -4,15 +4,21 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"os"
 	"strconv"
 
+	fdk "github.com/fnproject/fdk-go"
 	"github.com/google/go-github/github"
 	"github.com/nlopes/slack"
 	"golang.org/x/oauth2"
 )
 
 func main() {
+	fdk.Handle(fdk.HandlerFunc(myHandler))
+}
+
+func myHandler(ctx context.Context, in io.Reader, out io.Writer) {
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: os.Getenv("GITHUB_TOKEN")},
